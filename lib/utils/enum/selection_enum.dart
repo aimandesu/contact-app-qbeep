@@ -1,0 +1,1 @@
+enum SelectionEnum { all, favourite }
