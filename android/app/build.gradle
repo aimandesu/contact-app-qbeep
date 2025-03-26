@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.example.contact_app_qbeep"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 35
     ndkVersion = flutter.ndkVersion
 
     compileOptions {

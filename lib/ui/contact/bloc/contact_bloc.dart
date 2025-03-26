@@ -20,6 +20,7 @@ class ContactBloc extends HydratedBloc<ContactEvent, ContactState> {
     on<FavouriteContact>(_onFavouriteContact);
     on<DeleteContact>(_deleteContact);
     on<SaveUser>(_saveUser);
+    on<UpdateAvatar>(_updateAvatar);
   }
 
   Future<void> _onFetchContacts(
@@ -82,8 +83,6 @@ class ContactBloc extends HydratedBloc<ContactEvent, ContactState> {
       return contact.id == event.userContact.id ? event.userContact : contact;
     }).toList();
 
-    log('what: ${updatedList}');
-
     // If the contact was not found and replaced, we add it as a new contact.
     if (!updatedList.any((contact) => contact.id == event.userContact.id)) {
       log('message');
@@ -91,6 +90,17 @@ class ContactBloc extends HydratedBloc<ContactEvent, ContactState> {
     }
 
     emit(state.copyWith(userContact: updatedList));
+  }
+
+  void _updateAvatar(UpdateAvatar event, Emitter<ContactState> emit) {
+    final updatedContacts = state.userContact.map((contact) {
+      if (contact.id == event.contactId) {
+        return contact.copyWith(avatar: event.avatarPath);
+      }
+      return contact;
+    }).toList();
+
+    emit(state.copyWith(userContact: updatedContacts));
   }
 
   @override

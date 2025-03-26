@@ -19,3 +19,12 @@ class SaveUser extends ContactEvent {
   SaveUser({required this.userContact});
   final UserContact userContact;
 }
+
+class UpdateAvatar extends ContactEvent {
+  UpdateAvatar({
+    required this.contactId,
+    required this.avatarPath,
+  });
+  final int contactId;
+  final String avatarPath;
+}

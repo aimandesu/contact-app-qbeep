@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:contact_app_qbeep/data/model/user_contact.dart';
 import 'package:contact_app_qbeep/ui/contact/bloc/contact_bloc.dart';
 import 'package:contact_app_qbeep/utils/cubit/generic_cubit.dart';
@@ -77,16 +79,70 @@ class _ProfileState extends State<Profile> {
                     // Profile Picture
                     Stack(
                       children: [
-                        CircleAvatar(
-                          radius: 80,
-                          backgroundImage: widget.userContact.avatar == ''
-                              ? null
-                              : CachedNetworkImageProvider(
-                                  widget.userContact.avatar,
-                                ),
-                          child: widget.userContact.avatar.isEmpty
-                              ? const Icon(Icons.person, size: 80)
-                              : null,
+                        GestureDetector(
+                          onTap: () async {
+                            if (!genericState) {
+                              return;
+                            }
+
+                            List<int> excluded = [
+                              ...context
+                                  .read<ContactBloc>()
+                                  .state
+                                  .userContact
+                                  .map((e) => e.id)
+                            ];
+                            int newId = getRandomIntExcluding(excluded,
+                                min: 1, max: 50);
+
+                            final imagePath = await pickAndSaveImage();
+                            if (imagePath != null && context.mounted) {
+                              context.read<ContactBloc>().add(
+                                    UpdateAvatar(
+                                      contactId: widget.userContact.id == 0
+                                          ? newId
+                                          : widget.userContact.id,
+                                      avatarPath: imagePath,
+                                    ),
+                                  );
+                            }
+                          },
+                          child: CircleAvatar(
+                            radius: 80,
+                            backgroundImage: widget.userContact.avatar.isEmpty
+                                ? null
+                                : context
+                                        .watch<ContactBloc>()
+                                        .state
+                                        .userContact
+                                        .firstWhere(
+                                          (e) => e.id == widget.userContact.id,
+                                          orElse: () => UserContact.initial(),
+                                        )
+                                        .avatar
+                                        .startsWith('http')
+                                    ? CachedNetworkImageProvider(
+                                        widget.userContact.avatar)
+                                    : FileImage(
+                                        File(
+                                          context
+                                              .watch<ContactBloc>()
+                                              .state
+                                              .userContact
+                                              .firstWhere(
+                                                (e) =>
+                                                    e.id ==
+                                                    widget.userContact.id,
+                                                orElse: () =>
+                                                    UserContact.initial(),
+                                              )
+                                              .avatar,
+                                        ),
+                                      ) as ImageProvider,
+                            child: widget.userContact.avatar.isEmpty
+                                ? const Icon(Icons.person, size: 80)
+                                : null,
+                          ),
                         ),
                         if (widget.userContact.isFavourite &&
                             !genericState) ...[

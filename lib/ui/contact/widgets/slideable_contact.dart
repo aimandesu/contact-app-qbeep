@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:contact_app_qbeep/data/model/user_contact.dart';
 import 'package:contact_app_qbeep/ui/contact/bloc/contact_bloc.dart';
@@ -34,7 +36,14 @@ class SlideableContact extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 24,
-            backgroundImage: CachedNetworkImageProvider(userContact.avatar),
+            backgroundImage: userContact.avatar.isEmpty
+                ? null
+                : userContact.avatar.startsWith('http')
+                    ? CachedNetworkImageProvider(userContact.avatar)
+                    : FileImage(File(userContact.avatar)) as ImageProvider,
+            child: userContact.avatar.isEmpty
+                ? const Icon(Icons.person, size: 80)
+                : null,
           ),
           userContact.isFavourite
               ? const Positioned(

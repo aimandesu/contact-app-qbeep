@@ -1,5 +1,7 @@
 import 'dart:math';
-
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 
 Future<bool?> showCustomDialog({
@@ -98,4 +100,19 @@ int getRandomIntExcluding(List<int> excludedNumbers,
   } while (excludedNumbers.contains(randomNumber));
 
   return randomNumber;
+}
+
+Future<String?> pickAndSaveImage() async {
+  final picker = ImagePicker();
+  final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+  if (pickedFile == null) return null;
+
+  final directory = await getApplicationDocumentsDirectory();
+  final newPath = '${directory.path}/${pickedFile.name}';
+
+  final File newImage = File(pickedFile.path);
+  await newImage.copy(newPath);
+
+  return newPath; // Return the saved file path
 }
