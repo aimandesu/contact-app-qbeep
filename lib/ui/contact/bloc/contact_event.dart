@@ -14,3 +14,8 @@ class DeleteContact extends ContactEvent {
   DeleteContact({required this.contactId});
   final int contactId;
 }
+
+class SaveUser extends ContactEvent {
+  SaveUser({required this.userContact});
+  final UserContact userContact;
+}

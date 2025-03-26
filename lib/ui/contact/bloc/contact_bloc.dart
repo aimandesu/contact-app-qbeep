@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:contact_app_qbeep/data/model/user_contact.dart';
 import 'package:contact_app_qbeep/data/repositories/contact_repository.dart';
@@ -17,6 +19,7 @@ class ContactBloc extends HydratedBloc<ContactEvent, ContactState> {
     on<FetchContacts>(_onFetchContacts);
     on<FavouriteContact>(_onFavouriteContact);
     on<DeleteContact>(_deleteContact);
+    on<SaveUser>(_saveUser);
   }
 
   Future<void> _onFetchContacts(
@@ -72,6 +75,22 @@ class ContactBloc extends HydratedBloc<ContactEvent, ContactState> {
         userContact: updatedContacts,
       ),
     );
+  }
+
+  void _saveUser(SaveUser event, Emitter<ContactState> emit) {
+    final updatedList = state.userContact.map((contact) {
+      return contact.id == event.userContact.id ? event.userContact : contact;
+    }).toList();
+
+    log('what: ${updatedList}');
+
+    // If the contact was not found and replaced, we add it as a new contact.
+    if (!updatedList.any((contact) => contact.id == event.userContact.id)) {
+      log('message');
+      updatedList.add(event.userContact);
+    }
+
+    emit(state.copyWith(userContact: updatedList));
   }
 
   @override

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:contact_app_qbeep/data/repositories/contact_repository.dart';
 import 'package:contact_app_qbeep/ui/contact/bloc/contact_bloc.dart';
 import 'package:contact_app_qbeep/ui/contact/contact.dart';
+import 'package:contact_app_qbeep/utils/singleton/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: AppDefault.themeColor),
         useMaterial3: true,
       ),
       home: BlocProvider<ContactBloc>(
