@@ -4,7 +4,7 @@ import 'dart:math';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher.dart' as launcher;
 
 Future<bool?> showCustomDialog({
   required BuildContext context,
@@ -123,15 +123,19 @@ void openEmailApp({required String emailAddress}) async {
   final Uri emailLaunchUri = Uri(
     scheme: 'mailto',
     path: emailAddress,
-    query: '',
   );
 
-  if (await canLaunchUrl(emailLaunchUri)) {
-    await launchUrl(
+  try {
+    await launcher.launchUrl(
       emailLaunchUri,
-      mode: LaunchMode.externalApplication,
+      mode: launcher.LaunchMode.externalApplication,
     );
-  } else {
-    dev.log('Could not launch email app');
+    // if (await launcher.canLaunchUrl(emailLaunchUri)) {
+
+    // } else {
+    //   dev.log('Could not launch email app');
+    // }
+  } catch (e) {
+    dev.log('Error launching email app: $e');
   }
 }
