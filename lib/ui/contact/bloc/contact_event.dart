@@ -28,3 +28,8 @@ class UpdateAvatar extends ContactEvent {
   final int contactId;
   final String avatarPath;
 }
+
+class SearchContact extends ContactEvent {
+  SearchContact({required this.query});
+  final String query;
+}

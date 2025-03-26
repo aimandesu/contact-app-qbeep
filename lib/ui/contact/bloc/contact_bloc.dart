@@ -21,6 +21,7 @@ class ContactBloc extends HydratedBloc<ContactEvent, ContactState> {
     on<DeleteContact>(_deleteContact);
     on<SaveUser>(_saveUser);
     on<UpdateAvatar>(_updateAvatar);
+    on<SearchContact>(_searchContact);
   }
 
   Future<void> _onFetchContacts(
@@ -32,15 +33,20 @@ class ContactBloc extends HydratedBloc<ContactEvent, ContactState> {
     try {
       final contacts = await contactRepository.getUserContact();
 
-      emit(state.copyWith(
-        contactStatus: ContactStatus.completed,
-        userContact: contacts,
-      ));
+      emit(
+        state.copyWith(
+          contactStatus: ContactStatus.completed,
+          userContact: contacts,
+          originalContacts: contacts,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        contactStatus: ContactStatus.error,
-        errorMessage: e.toString(),
-      ));
+      emit(
+        state.copyWith(
+          contactStatus: ContactStatus.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
@@ -49,14 +55,19 @@ class ContactBloc extends HydratedBloc<ContactEvent, ContactState> {
     Emitter<ContactState> emit,
   ) {
     // Find and update the contact in the list
-    final List<UserContact> contact = state.userContact.map((contact) {
+    final List<UserContact> contact = state.originalContacts.map((contact) {
       if (contact.id == event.contactId) {
         return contact.copyWith(isFavourite: !contact.isFavourite);
       }
       return contact;
     }).toList();
 
-    emit(state.copyWith(userContact: contact));
+    emit(
+      state.copyWith(
+        userContact: contact,
+        originalContacts: contact,
+      ),
+    );
   }
 
   void _deleteContact(
@@ -65,7 +76,7 @@ class ContactBloc extends HydratedBloc<ContactEvent, ContactState> {
   ) {
     final int contactId = event.contactId;
 
-    final updatedContacts = state.userContact
+    final updatedContacts = state.originalContacts
         .where(
           (contact) => contact.id != contactId,
         )
@@ -74,33 +85,63 @@ class ContactBloc extends HydratedBloc<ContactEvent, ContactState> {
     emit(
       state.copyWith(
         userContact: updatedContacts,
+        originalContacts: updatedContacts,
       ),
     );
   }
 
   void _saveUser(SaveUser event, Emitter<ContactState> emit) {
-    final updatedList = state.userContact.map((contact) {
+    final updatedList = state.originalContacts.map((contact) {
       return contact.id == event.userContact.id ? event.userContact : contact;
     }).toList();
 
     // If the contact was not found and replaced, we add it as a new contact.
     if (!updatedList.any((contact) => contact.id == event.userContact.id)) {
-      log('message');
       updatedList.add(event.userContact);
     }
 
-    emit(state.copyWith(userContact: updatedList));
+    emit(
+      state.copyWith(
+        userContact: updatedList,
+        originalContacts: updatedList,
+      ),
+    );
   }
 
   void _updateAvatar(UpdateAvatar event, Emitter<ContactState> emit) {
-    final updatedContacts = state.userContact.map((contact) {
+    final updatedContacts = state.originalContacts.map((contact) {
       if (contact.id == event.contactId) {
         return contact.copyWith(avatar: event.avatarPath);
       }
       return contact;
     }).toList();
 
-    emit(state.copyWith(userContact: updatedContacts));
+    emit(
+      state.copyWith(
+        userContact: updatedContacts,
+        originalContacts: updatedContacts,
+      ),
+    );
+  }
+
+  void _searchContact(
+    SearchContact event,
+    Emitter<ContactState> emit,
+  ) {
+    final query = event.query.toLowerCase();
+
+    if (query.isEmpty) {
+      emit(state.copyWith(userContact: state.originalContacts));
+      return;
+    }
+
+    final filteredContacts = state.originalContacts.where((contact) {
+      return contact.firstName.toLowerCase().contains(query) ||
+          contact.lastName.toLowerCase().contains(query) ||
+          contact.email.toLowerCase().contains(query);
+    }).toList();
+
+    emit(state.copyWith(userContact: filteredContacts));
   }
 
   @override

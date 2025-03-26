@@ -352,6 +352,7 @@ class _ProfileState extends State<Profile> {
                                     avatar: avatar.isEmpty
                                         ? AppDefault.defaultImage
                                         : avatar,
+                                    isFavourite: widget.userContact.isFavourite,
                                   ),
                                 ),
                               );

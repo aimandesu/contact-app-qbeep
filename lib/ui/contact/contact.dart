@@ -1,6 +1,7 @@
 import 'package:contact_app_qbeep/data/model/user_contact.dart';
 import 'package:contact_app_qbeep/ui/contact/bloc/contact_bloc.dart';
 import 'package:contact_app_qbeep/ui/contact/profile.dart';
+import 'package:contact_app_qbeep/ui/contact/widgets/search_bar.dart';
 import 'package:contact_app_qbeep/ui/contact/widgets/slideable_contact.dart';
 import 'package:contact_app_qbeep/utils/cubit/generic_cubit.dart';
 import 'package:contact_app_qbeep/utils/enum/selection_enum.dart';
@@ -31,7 +32,14 @@ class Contact extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const EmptyAppBar(),
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: AppDefault.themeColor,
+        title: const Text(
+          'My Contacts',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
       backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -60,7 +68,8 @@ class Contact extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
             },
             listenWhen: (previous, current) =>
-                previous.userContact.length > current.userContact.length,
+                previous.originalContacts.length >
+                current.originalContacts.length,
           ),
           BlocListener<ContactBloc, ContactState>(
             listener: (context, state) {
@@ -68,7 +77,8 @@ class Contact extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
             },
             listenWhen: (previous, current) =>
-                previous.userContact.length < current.userContact.length,
+                previous.originalContacts.length <
+                current.originalContacts.length,
           ),
         ],
         child: SafeArea(
@@ -96,14 +106,20 @@ class Contact extends StatelessWidget {
                             (BuildContext context, bool innerBoxIsScrolled) {
                           return [
                             SliverAppBar(
-                              centerTitle: true,
-                              backgroundColor: AppDefault.themeColor,
-                              title: const Text(
-                                'My Contacts',
-                                style: TextStyle(color: Colors.white),
-                              ),
+                              backgroundColor: Colors.white,
                               floating: true,
                               pinned: true,
+                              expandedHeight: 110,
+                              flexibleSpace: Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: ContactSearchBar(
+                                  onDebounceRun: (p0) {
+                                    context
+                                        .read<ContactBloc>()
+                                        .add(SearchContact(query: p0));
+                                  },
+                                ),
+                              ),
                               bottom: PreferredSize(
                                 preferredSize: const Size.fromHeight(40),
                                 child: Container(

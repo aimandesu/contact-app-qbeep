@@ -12,12 +12,14 @@ class ContactState with _$ContactState {
   factory ContactState({
     required ContactStatus contactStatus,
     required List<UserContact> userContact,
+    required List<UserContact> originalContacts,
     required String errorMessage,
   }) = _ContactState;
 
   factory ContactState.initial() => ContactState(
         contactStatus: ContactStatus.initial,
         userContact: [],
+        originalContacts: [],
         errorMessage: '',
       );
 
