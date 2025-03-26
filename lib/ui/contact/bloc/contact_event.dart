@@ -33,3 +33,5 @@ class SearchContact extends ContactEvent {
   SearchContact({required this.query});
   final String query;
 }
+
+class ResetOriginalContact extends ContactEvent {}

@@ -1,8 +1,10 @@
-import 'dart:math';
+import 'dart:developer' as dev;
 import 'dart:io';
+import 'dart:math';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 Future<bool?> showCustomDialog({
   required BuildContext context,
@@ -115,4 +117,21 @@ Future<String?> pickAndSaveImage() async {
   await newImage.copy(newPath);
 
   return newPath; // Return the saved file path
+}
+
+void openEmailApp({required String emailAddress}) async {
+  final Uri emailLaunchUri = Uri(
+    scheme: 'mailto',
+    path: emailAddress,
+    query: '',
+  );
+
+  if (await canLaunchUrl(emailLaunchUri)) {
+    await launchUrl(
+      emailLaunchUri,
+      mode: LaunchMode.externalApplication,
+    );
+  } else {
+    dev.log('Could not launch email app');
+  }
 }

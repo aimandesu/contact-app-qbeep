@@ -22,6 +22,7 @@ class ContactBloc extends HydratedBloc<ContactEvent, ContactState> {
     on<SaveUser>(_saveUser);
     on<UpdateAvatar>(_updateAvatar);
     on<SearchContact>(_searchContact);
+    on<ResetOriginalContact>(_resetOriginalContact);
   }
 
   Future<void> _onFetchContacts(
@@ -109,17 +110,27 @@ class ContactBloc extends HydratedBloc<ContactEvent, ContactState> {
   }
 
   void _updateAvatar(UpdateAvatar event, Emitter<ContactState> emit) {
-    final updatedContacts = state.originalContacts.map((contact) {
+    List<UserContact> updatedContacts = state.originalContacts.map((contact) {
       if (contact.id == event.contactId) {
         return contact.copyWith(avatar: event.avatarPath);
       }
       return contact;
     }).toList();
 
+    bool contactExists =
+        updatedContacts.any((contact) => contact.id == event.contactId);
+
+    if (!contactExists) {
+      log('contact not exists');
+      updatedContacts.add(
+        UserContact.initial()
+            .copyWith(id: event.contactId, avatar: event.avatarPath),
+      );
+    }
+
     emit(
       state.copyWith(
         userContact: updatedContacts,
-        originalContacts: updatedContacts,
       ),
     );
   }
@@ -142,6 +153,15 @@ class ContactBloc extends HydratedBloc<ContactEvent, ContactState> {
     }).toList();
 
     emit(state.copyWith(userContact: filteredContacts));
+  }
+
+  void _resetOriginalContact(
+    ResetOriginalContact event,
+    Emitter<ContactState> emit,
+  ) async {
+    emit(
+      state.copyWith(userContact: state.originalContacts),
+    );
   }
 
   @override
