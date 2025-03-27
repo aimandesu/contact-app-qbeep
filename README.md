@@ -34,10 +34,14 @@ flutter run
 
 ### Screenshots
 
-<img src="images/screenshot_1.png" width="200" alt="Screenshot 1">
-<img src="images/screenshot_2.png" width="200" alt="Screenshot 2">
-<img src="images/screenshot_3.png" width="200" alt="Screenshot 3">
+<div style="display: flex; justify-content: space-between; align-items: center;">
+  <img src="images/screenshot_1.png" width="200" alt="Screenshot 1">
+  <img src="images/screenshot_2.png" width="200" alt="Screenshot 2">
+  <img src="images/screenshot_3.png" width="200" alt="Screenshot 3">
+</div>
 
 ### App Demo
 
-<img src="images/demo.gif" width="250" alt="App Demo">
+<div style="display: flex; justify-content: center;">
+  <img src="images/demo.gif" width="250" alt="App Demo">
+</div>
