@@ -18,7 +18,7 @@ A simple Flutter application to manage contacts.
 ### ✅ Step 1: Clone the repository
 
 ```bash
-git clone https://github.com/your_username/contact_app_qbeep.git
+git clone https://github.com/aimandesu/contact-app-qbeep
 cd contact_app_qbeep
 flutter pub get
 ```
@@ -26,3 +26,15 @@ flutter pub get
 ---
 
 ### ✅ Step 2: Run the application
+
+### App Preview
+
+## Screenshots
+
+![Screenshot1](images/screenshot_1.png)
+![Screenshot1](images/screenshot_2.png)
+![Screenshot1](images/screenshot_3.png)
+
+## App Demo (GIF)
+
+![Demo](images/demo.gif)
