@@ -19,8 +19,8 @@ A simple Flutter application to manage contacts.
 ```bash
 git clone https://github.com/aimandesu/contact-app-qbeep
 cd contact_app_qbeep
-dart run build_runner build --delete-conflicting-outputs
 flutter pub get
+dart run build_runner build --delete-conflicting-outputs
 ```
 
 ### ✅ Step 2: Run the application
