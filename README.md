@@ -1,16 +1,28 @@
-# contact_app_qbeep
+# 📇 Contact App Qbeep
 
-A new Flutter project.
+A simple Flutter application to manage contacts.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## ✨ Tech Stack
 
-A few resources to get you started if this is your first Flutter project:
+- **Flutter** 3.24.5
+- **Dart** 3.5.4
+- **Android SDK** 35
+- **Gradle Plugin**: com.android.application, kotlin-android, dev.flutter.flutter-gradle-plugin
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🚀 How to Run This App (Step by Step)
+
+### ✅ Step 1: Clone the repository
+
+```bash
+git clone https://github.com/your_username/contact_app_qbeep.git
+cd contact_app_qbeep
+flutter pub get
+```
+
+---
+
+### ✅ Step 2: Run the application
