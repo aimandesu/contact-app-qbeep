@@ -7,6 +7,7 @@ A simple Flutter application to manage contacts.
 - **Flutter** 3.24.5
 - **Dart** 3.5.4
 - **Android SDK** 35
+- **JDK Compatible** 17, 21
 - **Gradle Plugin**:
   - com.android.application
   - kotlin-android

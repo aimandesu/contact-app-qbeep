@@ -11,6 +11,9 @@ class ContactRepositoryImpl extends ContactRepository {
     perPage = 12,
   }) async {
     Dio dio = Dio();
+
+    dio.options.headers['x-api-key'] = 'reqres-free-v1';
+
     Response response =
         await dio.get('https://reqres.in/api/users?per_page=$perPage');
 

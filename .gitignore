@@ -45,3 +45,6 @@ app.*.map.json
 # Ignore generated files
 *.freezed.dart
 *.g.dart
+
+# Artifacts debug file
+/android/app/.cxx
